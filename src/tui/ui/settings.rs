@@ -4,6 +4,7 @@ use crate::tui::event::Key;
 use crate::tui::fuzzy::fuzzy_match;
 use crate::tui::theme::{EmphasisExt, ThemeExt};
 use crate::tui::ui::popups::highlighted_spans;
+use std::cell::Cell;
 use ratatui::{
   layout::{Alignment, Constraint, Layout, Rect},
   style::{Modifier, Style},
@@ -121,7 +122,7 @@ pub fn draw_settings(f: &mut Frame<'_>, app: &App) {
   let [tabs_area, list_area, help_area] = settings_layout(f.area());
 
   draw_category_tabs(f, app, tabs_area);
-  draw_settings_list(f, app, list_area);
+  draw_settings_list(f, app, list_area, &app.view.settings_scroll_offset);
   draw_settings_help(f, app, help_area);
 
   if app.view.settings_unsaved_prompt_visible {
@@ -154,7 +155,7 @@ fn draw_category_tabs(f: &mut Frame<'_>, app: &App, area: Rect) {
   f.render_widget(tabs, area);
 }
 
-fn draw_settings_list(f: &mut Frame<'_>, app: &App, area: Rect) {
+fn draw_settings_list(f: &mut Frame<'_>, app: &App, area: Rect, scroll_offset: &Cell<usize>) {
   let visible = filtered_settings(app);
   let items: Vec<ListItem> = visible
     .iter()
@@ -313,6 +314,9 @@ fn draw_settings_list(f: &mut Frame<'_>, app: &App, area: Rect) {
     items
   };
 
+  let visible_rows = area.height.saturating_sub(2) as usize;
+  let max_offset = items.len().saturating_sub(visible_rows);
+
   let list = List::new(items)
     .block(
       Block::default()
@@ -335,6 +339,10 @@ fn draw_settings_list(f: &mut Frame<'_>, app: &App, area: Rect) {
     );
 
   let mut state = ListState::default();
+  let offset = scroll_offset.get().min(max_offset);
+
+  *state.offset_mut() = offset;
+
   // The list renders the filtered view, so the highlight is a position in it,
   // not the index into `settings_items` the rest of the screen works with.
   state.select(
@@ -344,6 +352,7 @@ fn draw_settings_list(f: &mut Frame<'_>, app: &App, area: Rect) {
   );
 
   f.render_stateful_widget(list, area, &mut state);
+  scroll_offset.set(state.offset());
 }
 
 fn format_terminal_input_caps(app: &App) -> String {
