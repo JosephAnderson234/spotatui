@@ -94,7 +94,7 @@ Then:
 
 Local Files, Subsonic, Internet Radio, YouTube and Qobuz play through spotatui's own audio engine. Apple Music plays in the Music app, and spotatui is its remote. The setup of each source is in [Configuration](docs/configuration.md).
 
-Spotify plays in spotatui itself, on any Spotify Connect device, or on Cast and Connect speakers on your network. See [Where Spotify plays](docs/native-streaming.md#where-spotify-plays).
+Spotify plays in spotatui itself, on any Spotify Connect device, or on Cast and Connect speakers on your network. See [Where Spotify plays](docs/native-streaming.md#where-spotify-plays). For lossless audio, or an account that native streaming cannot play, spotatui can run Spotify's own player: see [Soloist](docs/soloist.md).
 
 ## Learn more
 
@@ -250,6 +250,7 @@ Everyone who helped, with code or without. To get on this list, see [Recognition
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zaydmulani09"><img src="https://avatars.githubusercontent.com/u/257340907?v=4?s=100" width="100px;" alt="zayd"/><br /><sub><b>zayd</b></sub></a><br /><a href="https://github.com/LargeModGames/spotatui/commits?author=zaydmulani09" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/BartholomewJr"><img src="https://avatars.githubusercontent.com/u/348017353?v=4?s=100" width="100px;" alt="BartholomewJr"/><br /><sub><b>BartholomewJr</b></sub></a><br /><a href="#financial-BartholomewJr" title="Financial">💵</a></td>
     </tr>
   </tbody>
 </table>
