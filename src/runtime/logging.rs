@@ -376,9 +376,14 @@ mod tests {
   fn every_cargo_feature_is_in_the_startup_header() {
     // The header list is hand-kept, and it fell behind once: release builds
     // carried `soloist` while the header left it out (#949).
+    // Scanned rather than parsed: the crate has no TOML parser, and adding one
+    // for a test would change `Cargo.lock`. Lines are trimmed first so an
+    // indented key still counts; continuation lines of a multi-line array start
+    // with `"` or `]` and comments with `#`, so the lowercase filter skips them.
     let manifest = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/Cargo.toml"));
     let declared: Vec<&str> = manifest
       .lines()
+      .map(str::trim_start)
       .skip_while(|line| line.trim() != "[features]")
       .skip(1)
       .take_while(|line| !line.starts_with('['))
